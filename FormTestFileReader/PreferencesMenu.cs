@@ -99,6 +99,7 @@ namespace FormTestFileReader
 
         }
 
+        #region SerializeConfiguration
         private void gbSerialization_VisibleChanged(object sender, EventArgs e)
         {
             if (gbSerialization.Visible)
@@ -122,10 +123,11 @@ namespace FormTestFileReader
         }
 
 
-        #region SerializeConfiguration
         public void SaveChangesOnFile()
         {
-            using (FileStream stream = new FileStream(CurrentConfiguration.Instance.FilesDirectory + @"\" + "CurrentConfiguration.xml", FileMode.Create, FileAccess.Write))
+            string filepath = Application.StartupPath + @"\";
+
+            using (FileStream stream = new FileStream(filepath + "CurrentConfiguration.xml", FileMode.OpenOrCreate, FileAccess.Write))
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(CurrentConfiguration));
                 serializer.Serialize(stream, CurrentConfiguration.Instance);

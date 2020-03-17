@@ -59,8 +59,8 @@ namespace FormTestFileReader
                 {
                     Id = tbGUID.Text,
                     Name = tbName.Text,
-                    Type = cbType.SelectedText.ToString(),
-                    GridFormat = new DataTable() { TableName = tbName.Text + "." + cbType.SelectedText.ToString() }
+                    Type = cbType.SelectedItem.ToString(),
+                    GridFormat = new DataTable() { TableName = tbName.Text + "." + cbType.SelectedItem.ToString() }
                 };
 
                 DialogResult = DialogResult.OK;
