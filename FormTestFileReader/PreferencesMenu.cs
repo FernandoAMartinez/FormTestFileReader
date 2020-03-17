@@ -2,7 +2,6 @@
 using System.IO;
 using System.Runtime.Serialization.Formatters;
 using System.Xml.Serialization;
-
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -46,6 +45,9 @@ namespace FormTestFileReader
                 if (rbBinary.Checked) CurrentConfiguration.Instance.SerializationType = "Binary";
                 else if (rbSOAP.Checked) CurrentConfiguration.Instance.SerializationType = "SOAP";
                 else if (rbXML.Checked) CurrentConfiguration.Instance.SerializationType = "XML";
+                //Inicio Modificación - FernandoAMartinez - 17/03/2020
+                CurrentConfiguration.Instance.BackgroundSerialization = cbBackground.Checked;
+                //Fin Modificación - FernandoAMartinez - 17/03/2020
             }
             else
             {
@@ -113,6 +115,10 @@ namespace FormTestFileReader
                     if (CurrentConfiguration.Instance.SerializationType == "Binary") rbBinary.Checked = true;
                     else if (CurrentConfiguration.Instance.SerializationType == "SOAP") rbSOAP.Checked = true;
                     else if (CurrentConfiguration.Instance.SerializationType == "XML") rbXML.Checked = true;
+
+                    //Inicio Modificación - FernandoAMartinez - 17/03/2020
+                    cbBackground.Checked = CurrentConfiguration.Instance.BackgroundSerialization;
+                    //Fin Modificación - FernandoAMartinez - 17/03/2020
                 }
                 else
                 {

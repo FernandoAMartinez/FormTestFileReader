@@ -7,8 +7,6 @@ namespace FormTestFileReader
     [Serializable, XmlRoot]
     public class CurrentConfiguration
     {
-
-
         private static CurrentConfiguration _instance;
 
         public static CurrentConfiguration Instance
@@ -38,7 +36,10 @@ namespace FormTestFileReader
         [XmlElement]
         public bool SerializeFiles { get; set; }
 
-        [XmlAttribute]
+        [XmlElement]
+        public bool BackgroundSerialization { get; set; }
+
+        [XmlElement]
         public string SerializationType { get; set; }
         #endregion
 
@@ -50,7 +51,6 @@ namespace FormTestFileReader
         public void UpdateWithAction() => LastAction = DateTime.Now;
 
         public void LoadPreferences(CurrentConfiguration configuration) => _instance = configuration;
-        
         #endregion
     }
 }

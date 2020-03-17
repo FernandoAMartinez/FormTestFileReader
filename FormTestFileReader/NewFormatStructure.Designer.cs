@@ -98,14 +98,14 @@
             this.tbGUID.Location = new System.Drawing.Point(137, 15);
             this.tbGUID.Name = "tbGUID";
             this.tbGUID.Size = new System.Drawing.Size(200, 20);
-            this.tbGUID.TabIndex = 5;
+            this.tbGUID.TabIndex = 2;
             // 
             // tbName
             // 
             this.tbName.Location = new System.Drawing.Point(137, 39);
             this.tbName.Name = "tbName";
             this.tbName.Size = new System.Drawing.Size(200, 20);
-            this.tbName.TabIndex = 6;
+            this.tbName.TabIndex = 3;
             // 
             // cbType
             // 
@@ -114,14 +114,14 @@
             this.cbType.Location = new System.Drawing.Point(137, 91);
             this.cbType.Name = "cbType";
             this.cbType.Size = new System.Drawing.Size(200, 21);
-            this.cbType.TabIndex = 7;
+            this.cbType.TabIndex = 5;
             // 
             // btnAdd
             // 
             this.btnAdd.Location = new System.Drawing.Point(12, 118);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(325, 23);
-            this.btnAdd.TabIndex = 8;
+            this.btnAdd.TabIndex = 6;
             this.btnAdd.Text = "Add";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
@@ -131,7 +131,7 @@
             this.tbFileName.Location = new System.Drawing.Point(152, 65);
             this.tbFileName.Name = "tbFileName";
             this.tbFileName.Size = new System.Drawing.Size(185, 20);
-            this.tbFileName.TabIndex = 10;
+            this.tbFileName.TabIndex = 4;
             // 
             // label4
             // 

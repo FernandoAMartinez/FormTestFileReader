@@ -28,10 +28,14 @@ namespace FormTestFileReader
             cbType.Items.Add("Footer");
 
             if (mode == "F")
+            {
                 rbFormat.Checked = true;
+                this.Text = "New Format";
+            }
             else if (mode == "S")
             {
                 rbStructure.Checked = true;
+                this.Text = "New Structure";
             }
         }
 
