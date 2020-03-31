@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
+using System.Collections.Generic;
 
 namespace FormTestFileReader
 {
@@ -19,6 +20,20 @@ namespace FormTestFileReader
             }
         }
         //Current Settings for the form
+        #region SerializationStrategy
+        //Inicio Modificación - FernandoAMartinez - 31/03/2020
+        private ISerializationStrategy strategy;
+
+        public void SetStrategy(ISerializationStrategy strategy) =>
+            this.strategy = strategy;
+
+        public void ExecuteSerialization(string filepath, List<FormatFileGenerator.Format> formats) =>
+            strategy.SerializeFile(filepath, formats);
+
+        public List<FormatFileGenerator.Format> ExecuteDeserialization(string filepath) =>
+            strategy.DeserializeFile(filepath);
+        //Fin Modificación - FernandoAMartinez - 31/03/2020
+        #endregion
 
         #region UserInformation
         [XmlAttribute]
@@ -30,7 +45,6 @@ namespace FormTestFileReader
         [XmlElement]
         public DateTime LastAction { get; set; }
         #endregion
-
 
         #region Serialization
         [XmlElement]

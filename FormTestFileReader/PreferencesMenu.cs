@@ -42,9 +42,21 @@ namespace FormTestFileReader
             if (cbEnableSerialization.Checked)
             {
                 CurrentConfiguration.Instance.SerializeFiles = true;
-                if (rbBinary.Checked) CurrentConfiguration.Instance.SerializationType = "Binary";
-                else if (rbSOAP.Checked) CurrentConfiguration.Instance.SerializationType = "SOAP";
-                else if (rbXML.Checked) CurrentConfiguration.Instance.SerializationType = "XML";
+                if (rbBinary.Checked)
+                {
+                    CurrentConfiguration.Instance.SerializationType = "Binary";
+                    CurrentConfiguration.Instance.SetStrategy(new BinaryStrategy());
+                }
+                else if (rbSOAP.Checked)
+                {
+                    CurrentConfiguration.Instance.SerializationType = "SOAP";
+                    CurrentConfiguration.Instance.SetStrategy(new SOAPStrategy());
+                }
+                else if (rbXML.Checked) 
+                { 
+                    CurrentConfiguration.Instance.SerializationType = "XML";
+                    CurrentConfiguration.Instance.SetStrategy(new XMLStrategy());
+                }
                 //Inicio Modificación - FernandoAMartinez - 17/03/2020
                 CurrentConfiguration.Instance.BackgroundSerialization = cbBackground.Checked;
                 //Fin Modificación - FernandoAMartinez - 17/03/2020
@@ -129,7 +141,7 @@ namespace FormTestFileReader
         }
 
 
-        public void SaveChangesOnFile()
+        private void SaveChangesOnFile()
         {
             string filepath = Application.StartupPath + @"\";
 

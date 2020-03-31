@@ -65,7 +65,6 @@ namespace FormTestFileReader
 
             serializationThread = new Thread(new ThreadStart(StartSerialization));
         }
-
         private void FileGenerator_Load(object sender, EventArgs e)
         {
             panelContainer.Visible = false;
@@ -74,8 +73,6 @@ namespace FormTestFileReader
                 if(!serializationThread.IsAlive)
                     serializationThread.Start();
         }
-
-        //CLOSES THE APPLICATION
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             serializationThread.Abort();
@@ -181,130 +178,41 @@ namespace FormTestFileReader
         #endregion
 
         #region Serialization
-        private void StartSerialization()
+        private void StartSerialization() 
         {
             while (serializationThread.IsAlive)
                 SerializeFormats();
         }
-
         private void SerializeFormats()
         {
             if (CurrentConfiguration.Instance.SerializeFiles)
             {
                 string filepath = CurrentConfiguration.Instance.FilesDirectory + @"\";
-
-                switch (CurrentConfiguration.Instance.SerializationType)
-                {
-                    case "XML":
-                        filepath += "XMLFormats.xml";
-
-                        using (FileStream stream = new FileStream(filepath, FileMode.OpenOrCreate, FileAccess.Write))
-                        {
-                            XmlSerializer serializer = new XmlSerializer(typeof(List<FormatFileGenerator.Format>));
-                            serializer.Serialize(stream, Formats);
-                            stream.Close();
-                        }
-                        break;
-
-                    case "Binary":
-                        filepath += "BinaryFormats.txt";
-
-                        using (FileStream stream = new FileStream(filepath, FileMode.OpenOrCreate, FileAccess.Write))
-                        {
-                            BinaryFormatter formatter = new BinaryFormatter();
-                            formatter.Serialize(stream, Formats);
-                            stream.Close();
-                        }
-                        break;
-
-                    case "SOAP":
-                        filepath += "SOAPFormats.xml";
-
-                        using (FileStream stream = new FileStream(filepath, FileMode.OpenOrCreate, FileAccess.Write))
-                        {
-                            SoapFormatter formatter = new SoapFormatter();
-                            formatter.Serialize(stream, Formats);
-                            stream.Close();
-                        }
-                        break;
-
-                    default:
-                        break;
-                }
+                CurrentConfiguration.Instance.ExecuteSerialization(filepath, Formats);
             }
             else MessageBox.Show("Please enable serialization on Preferences menu.", "Missing settings", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
-
         private void DeserializeFormats()
         {
             if (CurrentConfiguration.Instance.SerializeFiles)
             {
-                //Inicio Modificación - FernandoAMartinez - 17/03/2020
                 string filepath = CurrentConfiguration.Instance.FilesDirectory + @"\";
 
                 switch (CurrentConfiguration.Instance.SerializationType)
                 {
                     case "XML":
-                        filepath += "XMLFormats.xml";
-
-                        try
-                        {
-                            using (FileStream stream = new FileStream(filepath, FileMode.Open, FileAccess.Read))
-                            {
-                                XmlSerializer serializer = new XmlSerializer(typeof(List<FormatFileGenerator.Format>));
-                                if (Formats.Count == 0)
-                                {
-                                    Formats = new List<FormatFileGenerator.Format>();
-                                    Formats = (List<FormatFileGenerator.Format>)serializer.Deserialize(stream);
-                                }
-
-                                stream.Close();
-                            }
-                        }
-                        catch (FileNotFoundException ex) { MessageBox.Show("Previous settings not found " + ex.Message, "Settings not found"); }
+                        CurrentConfiguration.Instance.SetStrategy(new XMLStrategy());
                         break;
-
+                
                     case "Binary":
-                        filepath += "BinaryFormats.txt";
-
-                        try
-                        {
-                            using (FileStream stream = new FileStream(filepath, FileMode.Open, FileAccess.Read))
-                            {
-                                BinaryFormatter formatter = new BinaryFormatter();
-                                if (Formats.Count == 0)
-                                {
-                                    Formats = new List<FormatFileGenerator.Format>();
-                                    Formats = (List<FormatFileGenerator.Format>)formatter.Deserialize(stream);
-                                }
-                                stream.Close();
-                            }
-                        }
-                        catch (FileNotFoundException ex) { MessageBox.Show("Previous settings not found " + ex.Message, "Settings not found"); }
+                        CurrentConfiguration.Instance.SetStrategy(new BinaryStrategy());
                         break;
-
+                
                     case "SOAP":
-                        filepath += "SOAPFormats.xml";
-
-                        try
-                        {
-                            using (FileStream stream = new FileStream(filepath, FileMode.Open, FileAccess.Read))
-                            {
-                                SoapFormatter formatter = new SoapFormatter();
-                                if(Formats.Count == 0)
-                                {
-                                    Formats = new List<FormatFileGenerator.Format>();
-                                    Formats = (List<FormatFileGenerator.Format>)formatter.Deserialize(stream);
-                                }
-                                stream.Close();
-                            }
-                        }
-                        catch (FileNotFoundException ex) { MessageBox.Show("Previous settings not found " + ex.Message, "Settings not found"); }
-                        break;
-
-                    default:
+                        CurrentConfiguration.Instance.SetStrategy(new SOAPStrategy());
                         break;
                 }
+                Formats = CurrentConfiguration.Instance.ExecuteDeserialization(filepath);
             }
         }
         #endregion
@@ -327,8 +235,6 @@ namespace FormTestFileReader
             
             await ProcessFileAsync(builder);
         }
-
-        //WRITE THE FILE
         public async Task ProcessFileAsync(StringBuilder builder)
         {
             FolderBrowserDialog browserDialog = new FolderBrowserDialog();
@@ -340,8 +246,7 @@ namespace FormTestFileReader
             string filename = SelectedFormat.FileName.ToString();
 
             await WriteFileFormatAsync(filepath, filename, builder.ToString());
-        }
-        
+        }   
         public async Task WriteFileFormatAsync(string filepath, string filename, string text)
         {
             byte[] encodedText = Encoding.Unicode.GetBytes(text);
@@ -385,10 +290,8 @@ namespace FormTestFileReader
             }
             else if (preferences.DialogResult == DialogResult.Cancel) { }
         }
-
-        private void preferencesToolStripMenuItem_Click(object sender, EventArgs e) => OpenPreferencesMenu();
-        
-
+        private void preferencesToolStripMenuItem_Click(object sender, EventArgs e) => 
+            OpenPreferencesMenu();
         private void LoadPreferencesFromFile()
         {
             //Inicio Modificación - FernandoAMartinez - 17/03/2020
@@ -413,8 +316,8 @@ namespace FormTestFileReader
         #endregion
 
         #region FormatPreferences
-        private void LoadFormatsFromFile() => DeserializeFormats();
-
+        private void LoadFormatsFromFile() => 
+            DeserializeFormats();
         private void saveFormatsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!CurrentConfiguration.Instance.BackgroundSerialization) SerializeFormats();
